@@ -1,0 +1,25 @@
+
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: Api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: service-utilisateur
+          uri: lb://service-utilisateur
+          predicates:
+            - Path=/utilisateurs/**
+        - id: service-produit
+          uri: lb://service-produit # Utilisation du load balancer pour Eureka
+          predicates:
+            - Path=/products/**
+        #- id: internautes
+        #  uri: lb://internaute # Utilisation du load balancer pour Eureka
+         # predicates:
+          #  - Path=/api/internaute/**
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

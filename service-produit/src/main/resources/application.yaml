@@ -1,0 +1,67 @@
+# Service name for identification in Eureka
+spring:
+  application:
+    name: service-produit  # Application name for identification in Eureka
+
+  cloud:
+    config:
+      uri: http://localhost:8888  # Address of your Config Server
+      import: "optional:configserver:"  # Optional import for avoiding configuration import errors
+      import-check:
+        enabled: false  # Disable the configuration import check
+
+  eureka:
+    client:
+      service-url:
+        defaultZone: http://localhost:8761/eureka/  # Address of the Eureka server
+
+  management:
+    tracing:
+      sampling:
+        probability: 1.0  # Enable full traceability
+    zipkin:
+      endpoint: http://localhost:9411/api/v2/spans  # Zipkin server endpoint
+
+    logging:
+      level:
+        root: INFO
+        org.hibernate.SQL: OFF
+
+    endpoints:
+      web:
+        exposure:
+          include: "health,info,prometheus"
+
+    metrics:
+      export:
+        prometheus:
+          enabled: true
+
+    server:
+      error:
+        include-stacktrace: never  # Options: always, on-trace-param, never
+
+  resilience4j:
+    retry:
+      instances:
+        default:
+          max-attempts: 3          # Number of retry attempts
+          wait-duration: 500ms     # Wait time between retries
+    circuitbreaker:
+      instances:
+        default:
+          sliding-window-size: 10  # Number of calls to evaluate
+          failure-rate-threshold: 50  # Percentage of failures to open the circuit
+          wait-duration-in-open-state: 5s  # Duration to wait before retrying after the circuit is opened
+    rate-limiter:
+      instances:
+        default:
+          limit-for-period: 10      # Max number of calls allowed in a given period
+          limit-refresh-period: 1s  # Refresh period for the rate limiter
+
+ribbon:
+  eureka:
+    enabled: false
+  listOfServers: localhost:8807,localhost:8808
+
+

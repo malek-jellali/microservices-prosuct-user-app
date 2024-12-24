@@ -1,0 +1,17 @@
+server:
+  port: 8888 # Le port sur lequel le serveur de configuration sera exposé
+
+spring:
+  application:
+    name: config-server # Nom de l'application
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/your-repo/config-repo.git # Remplacez par l'URL de votre dépôt Git contenant les configurations
+          clone-on-start: false # Clone le dépôt Git au démarrage
+          default-label: main # Branche par défaut (remplacez 'main' si votre branche est différente)
+
+logging:
+  level:
+    org.springframework.cloud.config.server: DEBUG # Niveau de log pour le serveur de configuration
